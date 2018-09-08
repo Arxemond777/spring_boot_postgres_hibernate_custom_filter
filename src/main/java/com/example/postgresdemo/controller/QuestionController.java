@@ -2,6 +2,7 @@ package com.example.postgresdemo.controller;
 
 import com.example.postgresdemo.exception.ResourceNotFoundException;
 import com.example.postgresdemo.model.Question;
+import com.example.postgresdemo.pageable.*;
 import com.example.postgresdemo.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,9 +18,13 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @GetMapping("/questions")
-    public Page<Question> getQuestions(Pageable pageable) {
+    public Page<Question> getQuestions(@RequestParam(value = "offset", required = false) int offset, @RequestParam(value = "limit", required = false) int limit) {
+        Pageable pageable = new OffsetBasedPageRequest(offset, limit);
         return questionRepository.findAll(pageable);
     }
+    /*public Page<Question> getQuestions(ChunkRequest pageable) {
+        return questionRepository.findAll(pageable);
+    }*/
 
 
     @PostMapping("/questions")
